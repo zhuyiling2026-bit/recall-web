@@ -1,0 +1,24 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.yellow {
+  background: #FFF8E7;
+  color: #B8860B;
+}
+
+.red {
+  background: #FDEDEC;
+  color: #C0605A;
+}
+
+.gray {
+  background: #F1F5F9;
+  color: #94A3B8;
+}

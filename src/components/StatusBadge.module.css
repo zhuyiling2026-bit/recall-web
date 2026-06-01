@@ -1,0 +1,19 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.read {
+  background: #EDF6F0;
+  color: #5A9A6F;
+}
+
+.deleted {
+  background: #FDEDEC;
+  color: #C0605A;
+}

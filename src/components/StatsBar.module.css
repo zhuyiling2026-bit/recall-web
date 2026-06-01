@@ -1,0 +1,36 @@
+.bar {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.value {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.label {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+  .bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 24px;
+    padding: 16px 24px;
+    justify-items: center;
+  }
+}
