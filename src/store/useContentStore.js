@@ -9,6 +9,7 @@ export const useContentStore = create((set, get) => ({
   error: null,
   filterCategory: 'all',
   viewMode: 'inbox',
+  searchQuery: '',
 
   load: async () => {
     set({ loading: true, error: null });
@@ -54,6 +55,7 @@ export const useContentStore = create((set, get) => ({
 
   setFilter: (category) => set({ filterCategory: category }),
   setViewMode: (mode) => set({ viewMode: mode }),
+  setSearch: (q) => set({ searchQuery: q }),
   dismissPreview: () => set({ preview: null }),
   dismissError: () => set({ error: null }),
 }));

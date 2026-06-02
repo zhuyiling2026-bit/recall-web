@@ -5,7 +5,7 @@ import ContentCard from './ContentCard';
 import styles from './ContentList.module.css';
 
 export default function ContentList() {
-  const { items, loading, load, filterCategory, viewMode } = useContentStore();
+  const { items, loading, load, filterCategory, viewMode, searchQuery } = useContentStore();
 
   useEffect(() => {
     load();
@@ -25,8 +25,17 @@ export default function ContentList() {
       );
     }
 
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter((i) =>
+        i.title?.toLowerCase().includes(q) ||
+        i.summary?.toLowerCase().includes(q) ||
+        (Array.isArray(i.tags) && i.tags.some((t) => t.toLowerCase().includes(q)))
+      );
+    }
+
     return result;
-  }, [items, filterCategory, viewMode]);
+  }, [items, filterCategory, viewMode, searchQuery]);
 
   if (loading) {
     return (

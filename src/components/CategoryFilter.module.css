@@ -5,13 +5,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .tabs {
   display: flex;
   gap: 4px;
   flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .tab {
@@ -32,6 +33,75 @@
   background: var(--color-primary);
   color: #7A4A50;
   font-weight: 600;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 200px;
+  min-width: 120px;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-bg);
+  transition: background 200ms ease, border-color 200ms ease, max-width 250ms ease;
+}
+
+.searchActive {
+  max-width: 260px;
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.searchActive:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(232, 180, 184, 0.2);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  transition: color 200ms ease;
+}
+
+.searchActive .searchIcon {
+  color: var(--color-text-muted);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 6px 28px 6px 30px;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  background: transparent;
+  color: var(--color-text);
+  outline: none;
+}
+
+.searchWrap.searchActive .searchInput {
+  color: var(--color-text);
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.searchClear {
+  position: absolute;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  padding: 0;
 }
 
 .views {
@@ -66,7 +136,7 @@
   .wrapper {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
     padding: 0 16px 8px;
   }
 
@@ -75,5 +145,14 @@
     width: 100%;
     padding-bottom: 4px;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .searchWrap {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .views {
+    align-self: flex-end;
   }
 }
