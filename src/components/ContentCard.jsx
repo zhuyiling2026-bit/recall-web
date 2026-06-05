@@ -8,6 +8,8 @@ import styles from './ContentCard.module.css';
 
 export default function ContentCard({ item, index }) {
   const update = useContentStore((s) => s.update);
+  const remove = useContentStore((s) => s.remove);
+  const viewMode = useContentStore((s) => s.viewMode);
   const [deleting, setDeleting] = useState(false);
   const timerRef = useRef(null);
   const isDeleted = item.status === 'deleted';
@@ -25,6 +27,10 @@ export default function ContentCard({ item, index }) {
     setDeleting(false);
   };
 
+  const handleRestore = () => {
+    update(item.id, { status: 'new' });
+  };
+
   useEffect(() => {
     return () => clearTimeout(timerRef.current);
   }, []);
@@ -40,7 +46,7 @@ export default function ContentCard({ item, index }) {
         <div className={styles.header}>
           <h3 className={styles.title}>{item.title}</h3>
           <div className={styles.badges}>
-            {reminder && <ReminderTag {...reminder} />}
+            {!isDeleted && reminder && <ReminderTag {...reminder} />}
             <StatusBadge status={item.status} />
           </div>
         </div>
@@ -56,35 +62,54 @@ export default function ContentCard({ item, index }) {
       </div>
 
       <div className={styles.actions}>
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.actionLink}
-          title="Open original"
-        >
-          <ExternalLink size={16} />
-        </a>
-
-        {!isDeleted && !deleting && (
-          <button
-            className={styles.actionBtn}
-            onClick={() => update(item.id, { status: 'read' })}
-            title="Mark as read"
-          >
-            <BookOpen size={16} />
-          </button>
-        )}
-        {!isDeleted && (
-          deleting ? (
-            <button className={`${styles.actionBtn} ${styles.undoBtn}`} onClick={handleUndo} title="Undo delete">
+        {isDeleted ? (
+          <>
+            <button
+              className={styles.actionBtn}
+              onClick={handleRestore}
+              title="恢复"
+            >
               <Undo2 size={16} />
             </button>
-          ) : (
-            <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={handleDelete} title="Delete">
+            <button
+              className={`${styles.actionBtn} ${styles.deleteBtn}`}
+              onClick={() => remove(item.id)}
+              title="永久删除"
+            >
               <Trash2 size={16} />
             </button>
-          )
+          </>
+        ) : (
+          <>
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.actionLink}
+              title="Open original"
+            >
+              <ExternalLink size={16} />
+            </a>
+
+            {!deleting && (
+              <button
+                className={styles.actionBtn}
+                onClick={() => update(item.id, { status: 'read' })}
+                title="Mark as read"
+              >
+                <BookOpen size={16} />
+              </button>
+            )}
+            {deleting ? (
+              <button className={`${styles.actionBtn} ${styles.undoBtn}`} onClick={handleUndo} title="Undo delete">
+                <Undo2 size={16} />
+              </button>
+            ) : (
+              <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={handleDelete} title="Delete">
+                <Trash2 size={16} />
+              </button>
+            )}
+          </>
         )}
       </div>
 

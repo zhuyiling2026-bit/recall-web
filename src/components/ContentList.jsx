@@ -12,6 +12,13 @@ export default function ContentList() {
   }, [load]);
 
   const filtered = useMemo(() => {
+    if (viewMode === 'trash') {
+      const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+      return items.filter(
+        (i) => i.status === 'deleted' && new Date(i.createdAt) >= threeDaysAgo,
+      );
+    }
+
     let result = items.filter((i) => i.status !== 'deleted');
 
     if (viewMode === 'review') {
@@ -20,9 +27,12 @@ export default function ContentList() {
 
     if (filterCategory !== 'all') {
       const cats = CATEGORY_MAP[filterCategory];
-      result = result.filter((i) =>
-        Array.isArray(cats) ? cats.includes(i.category) : i.category === cats
-      );
+      result = result.filter((i) => {
+        const cat = (i.category || '').toLowerCase();
+        return Array.isArray(cats)
+          ? cats.some((c) => c.toLowerCase() === cat)
+          : cat === cats.toLowerCase();
+      });
     }
 
     if (searchQuery) {
@@ -54,7 +64,12 @@ export default function ContentList() {
   if (filtered.length === 0) {
     return (
       <div className={styles.empty}>
-        {viewMode === 'review' ? (
+        {viewMode === 'trash' ? (
+          <>
+            <p className={styles.emptyTitle}>回收站为空</p>
+            <p className={styles.emptyHint}>删除的内容会出现在这里，超过 3 天自动清空</p>
+          </>
+        ) : viewMode === 'review' ? (
           <>
             <p className={styles.emptyTitle}>Nothing to review</p>
             <p className={styles.emptyHint}>Come back later — new and unread items will show up here</p>
@@ -76,6 +91,11 @@ export default function ContentList() {
 
   return (
     <div className={styles.section}>
+      {viewMode === 'trash' && (
+        <div className={styles.trashBanner}>
+          回收站内容将在删除 3 天后自动清空
+        </div>
+      )}
       <div className={styles.grid}>
         {filtered.map((item, idx) => (
           <ContentCard key={item.id} item={item} index={idx} />

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { fetchContents, importContent, confirmContent, updateContent } from '../api/content';
+import { fetchContents, importContent, updateContent, deleteContent } from '../api/content';
 
 export const useContentStore = create((set, get) => ({
   items: [],
@@ -26,21 +26,18 @@ export const useContentStore = create((set, get) => ({
     try {
       const result = await importContent(url);
       set({ preview: result, importing: false });
+      get().load();
     } catch (err) {
       set({ error: err.message, importing: false });
     }
   },
 
-  confirm: async () => {
-    const { preview } = get();
-    if (!preview) return;
-    set({ importing: true, error: null });
+  remove: async (id) => {
     try {
-      await confirmContent(preview);
-      set({ preview: null, importing: false });
+      await deleteContent(id);
       get().load();
     } catch (err) {
-      set({ error: err.message, importing: false });
+      set({ error: err.message });
     }
   },
 

@@ -73,6 +73,17 @@
   color: var(--color-text-muted);
 }
 
+.trashBanner {
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  background: #FDEDEC;
+  border: 1px solid #E8B4B8;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: #7A4A50;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .section {
     padding: 0 16px 32px;

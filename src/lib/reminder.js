@@ -11,7 +11,7 @@ export function getReminder(item) {
 
 export const CATEGORY_MAP = {
   all: null,
-  education: 'education',
+  education: ['education', 'science'],
   business: ['business', 'tech'],
   entertainment: 'entertainment',
   health: ['health', 'other'],

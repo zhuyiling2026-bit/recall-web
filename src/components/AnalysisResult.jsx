@@ -1,9 +1,9 @@
-import { X, Tag, Folder, FileText, Check, Loader2 } from 'lucide-react';
+import { X, Tag, Folder, FileText, Check } from 'lucide-react';
 import { useContentStore } from '../store/useContentStore';
 import styles from './AnalysisResult.module.css';
 
 export default function AnalysisResult() {
-  const { preview, importing, confirm, dismissPreview } = useContentStore();
+  const { preview, dismissPreview } = useContentStore();
 
   if (!preview) return null;
 
@@ -32,23 +32,16 @@ export default function AnalysisResult() {
         <div className={styles.tagsRow}>
           <Tag size={14} className={styles.icon} />
           <div className={styles.tags}>
-            {preview.tags.map((tag) => (
+            {(preview.tags || []).map((tag) => (
               <span key={tag} className={styles.tag}>{tag}</span>
             ))}
           </div>
         </div>
 
         <div className={styles.actions}>
-          <button className={styles.cancelBtn} onClick={dismissPreview}>
-            Cancel
-          </button>
-          <button className={styles.confirmBtn} onClick={confirm} disabled={importing}>
-            {importing ? (
-              <Loader2 size={18} className={styles.spin} />
-            ) : (
-              <Check size={18} />
-            )}
-            Save it
+          <button className={styles.confirmBtn} onClick={dismissPreview}>
+            <Check size={18} />
+            完成
           </button>
         </div>
       </div>

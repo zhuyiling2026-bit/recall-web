@@ -5,6 +5,9 @@
   background: rgba(255, 245, 245, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .inner {
@@ -14,6 +17,28 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-right: 24px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.logoutBtn:hover {
+  color: #dc2626;
+  border-color: #dc2626;
 }
 
 .brand {

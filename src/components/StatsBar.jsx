@@ -5,10 +5,11 @@ import styles from './StatsBar.module.css';
 export default function StatsBar() {
   const items = useContentStore((s) => s.items);
 
-  const unread = items.filter((i) => !i.status || i.status !== 'read').length;
-  const read = items.filter((i) => i.status === 'read').length;
-  const review = items.filter((i) => getReminder(i) !== null).length;
-  const total = items.length;
+  const active = items.filter((i) => i.status !== 'deleted');
+  const unread = active.filter((i) => !i.status || i.status !== 'read').length;
+  const read = active.filter((i) => i.status === 'read').length;
+  const review = active.filter((i) => getReminder(i) !== null).length;
+  const total = active.length;
 
   const stats = [
     { label: 'Unread', value: unread },
