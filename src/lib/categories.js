@@ -5,6 +5,8 @@ const DEFAULTS = [
   { key: 'business', label: 'Career' },
   { key: 'entertainment', label: 'Fun' },
   { key: 'health', label: 'Life' },
+  { key: 'travel', label: 'Travel' },
+  { key: 'lifestyle', label: 'Lifestyle' },
 ];
 
 export function loadCategories() {

@@ -15,4 +15,5 @@ export const CATEGORY_MAP = {
   business: ['business', 'tech'],
   entertainment: 'entertainment',
   health: ['health', 'other'],
+  travel: 'travel',
 };

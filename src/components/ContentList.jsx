@@ -29,6 +29,7 @@ export default function ContentList() {
       const cats = CATEGORY_MAP[filterCategory];
       result = result.filter((i) => {
         const cat = (i.category || '').toLowerCase();
+        if (cats === undefined) return cat === filterCategory;
         return Array.isArray(cats)
           ? cats.some((c) => c.toLowerCase() === cat)
           : cat === cats.toLowerCase();
