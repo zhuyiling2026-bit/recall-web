@@ -1,20 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
 import { Search, X, Settings, Plus, Trash2 } from 'lucide-react';
 import { useContentStore } from '../store/useContentStore';
-import { loadCategories, saveCategories, resetCategories } from '../lib/categories';
 import styles from './CategoryFilter.module.css';
 
 export default function CategoryFilter() {
   const filterCategory = useContentStore((s) => s.filterCategory);
   const viewMode = useContentStore((s) => s.viewMode);
   const searchQuery = useContentStore((s) => s.searchQuery);
+  const categories = useContentStore((s) => s.categories);
+  const loadCategories = useContentStore((s) => s.loadCategories);
+  const saveCategories = useContentStore((s) => s.saveCategories);
   const setFilter = useContentStore((s) => s.setFilter);
   const setViewMode = useContentStore((s) => s.setViewMode);
   const setSearch = useContentStore((s) => s.setSearch);
 
   const [local, setLocal] = useState(searchQuery);
   const [focused, setFocused] = useState(false);
-  const [categories, setCategories] = useState(loadCategories);
   const [editing, setEditing] = useState(false);
   const [editList, setEditList] = useState([]);
   const [newLabel, setNewLabel] = useState('');
@@ -22,8 +23,8 @@ export default function CategoryFilter() {
   const active = focused || local;
 
   useEffect(() => {
-    setCategories(loadCategories());
-  }, []);
+    loadCategories();
+  }, [loadCategories]);
 
   const handleSearch = (val) => {
     setLocal(val);
@@ -34,7 +35,7 @@ export default function CategoryFilter() {
   const handleClear = () => { setLocal(''); setSearch(''); };
 
   const openEdit = () => {
-    setEditList(loadCategories());
+    setEditList([...categories]);
     setNewLabel('');
     setEditing(true);
   };
@@ -61,14 +62,18 @@ export default function CategoryFilter() {
   const saveEdit = () => {
     const valid = editList.filter((c) => c.label.trim());
     saveCategories(valid);
-    setCategories(valid);
     setEditing(false);
   };
 
   const handleReset = () => {
-    const defaults = resetCategories();
-    setEditList(defaults);
-    setCategories(defaults);
+    const defaults = [
+      { key: 'education', label: 'Learn' },
+      { key: 'business', label: 'Career' },
+      { key: 'entertainment', label: 'Fun' },
+      { key: 'health', label: 'Life' },
+      { key: 'travel', label: 'Travel' },
+      { key: 'lifestyle', label: 'Lifestyle' },
+    ];
     saveCategories(defaults);
     setEditing(false);
   };
@@ -92,6 +97,12 @@ export default function CategoryFilter() {
               {c.label}
             </button>
           ))}
+          <button
+            className={`${styles.tab} ${filterCategory === '__other__' ? styles.active : ''}`}
+            onClick={() => setFilter('__other__')}
+          >
+            Other
+          </button>
           <button className={styles.editBtn} onClick={openEdit} title="Manage categories">
             <Settings size={14} />
           </button>
@@ -135,7 +146,7 @@ export default function CategoryFilter() {
         <div className={styles.modalOverlay} onClick={() => setEditing(false)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <h3 className={styles.modalTitle}>Manage Categories</h3>
-            <p className={styles.modalHint}>Add, rename, or remove category tabs</p>
+            <p className={styles.modalHint}>Add, rename, or remove category tabs — synced to your account</p>
 
             <div className={styles.editList}>
               {editList.map((cat, idx) => (

@@ -65,3 +65,21 @@ export async function updateContent(id, patch) {
   if (!res.ok) throw new Error(data.error || 'Failed to update content');
   return data;
 }
+
+const CAT_API = `${BASE}/categories`;
+
+export async function fetchCategories() {
+  const res = await apiFetch(CAT_API);
+  if (!res.ok) throw new Error('Failed to fetch categories');
+  return res.json();
+}
+
+export async function saveCategories(cats) {
+  const res = await apiFetch(CAT_API, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cats),
+  });
+  if (!res.ok) throw new Error('Failed to save categories');
+  return res.json();
+}

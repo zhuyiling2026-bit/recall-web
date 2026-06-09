@@ -1,8 +1,11 @@
 import { create } from 'zustand';
-import { fetchContents, importContent, confirmContent, updateContent, deleteContent } from '../api/content';
+import { fetchContents, fetchCategories, saveCategories, importContent, confirmContent, updateContent, deleteContent } from '../api/content';
+import { loadCategories } from '../lib/categories';
 
 export const useContentStore = create((set, get) => ({
   items: [],
+  categories: [],
+  categoriesLoading: false,
   loading: false,
   importing: false,
   preview: null,
@@ -21,6 +24,33 @@ export const useContentStore = create((set, get) => ({
     }
   },
 
+  loadCategories: async () => {
+    set({ categoriesLoading: true });
+    try {
+      let cats = await fetchCategories();
+      if (!cats || cats.length === 0) {
+        const local = loadCategories();
+        if (local && local.length > 0) {
+          await saveCategories(local);
+          cats = local;
+          try { localStorage.removeItem('recall_categories'); } catch {}
+        }
+      }
+      set({ categories: cats || [], categoriesLoading: false });
+    } catch (err) {
+      set({ categoriesLoading: false, error: err.message });
+    }
+  },
+
+  saveCategories: async (cats) => {
+    try {
+      const saved = await saveCategories(cats);
+      set({ categories: saved });
+    } catch (err) {
+      set({ error: err.message });
+    }
+  },
+
   import: async (url) => {
     set({ importing: true, error: null, preview: null });
     try {
@@ -32,12 +62,13 @@ export const useContentStore = create((set, get) => ({
     }
   },
 
-  confirm: async () => {
+  confirm: async (overrides) => {
     const { preview } = get();
     if (!preview) return;
+    const payload = overrides ? { ...preview, ...overrides } : preview;
     set({ importing: true, error: null });
     try {
-      await confirmContent(preview);
+      await confirmContent(payload);
       set({ preview: null, importing: false });
       get().load();
     } catch (err) {

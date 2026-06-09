@@ -66,6 +66,19 @@
   text-transform: capitalize;
 }
 
+.categorySelect {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: #FDF2F3;
+  color: #C07A80;
+  border: 1px solid #E8B4B8;
+  border-radius: 20px;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 .summaryRow {
   display: flex;
   gap: 10px;

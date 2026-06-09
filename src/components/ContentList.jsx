@@ -1,11 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import { useContentStore } from '../store/useContentStore';
-import { getReminder, CATEGORY_MAP } from '../lib/reminder';
+import { getReminder } from '../lib/reminder';
 import ContentCard from './ContentCard';
 import styles from './ContentList.module.css';
 
 export default function ContentList() {
-  const { items, loading, load, filterCategory, viewMode, searchQuery } = useContentStore();
+  const { items, categories, loading, load, filterCategory, viewMode, searchQuery } = useContentStore();
 
   useEffect(() => {
     load();
@@ -26,14 +26,18 @@ export default function ContentList() {
     }
 
     if (filterCategory !== 'all') {
-      const cats = CATEGORY_MAP[filterCategory];
-      result = result.filter((i) => {
-        const cat = (i.category || '').toLowerCase();
-        if (cats === undefined) return cat === filterCategory;
-        return Array.isArray(cats)
-          ? cats.some((c) => c.toLowerCase() === cat)
-          : cat === cats.toLowerCase();
-      });
+      if (filterCategory === '__other__') {
+        const userKeys = categories.map((c) => c.key);
+        result = result.filter((i) => {
+          const cat = (i.category || '').toLowerCase();
+          return !userKeys.includes(cat);
+        });
+      } else {
+        result = result.filter((i) => {
+          const cat = (i.category || '').toLowerCase();
+          return cat === filterCategory;
+        });
+      }
     }
 
     if (searchQuery) {
@@ -46,7 +50,7 @@ export default function ContentList() {
     }
 
     return result;
-  }, [items, filterCategory, viewMode, searchQuery]);
+  }, [items, categories, filterCategory, viewMode, searchQuery]);
 
   if (loading) {
     return (

@@ -88,6 +88,21 @@
   color: #C07A80;
   border-radius: 20px;
   text-transform: capitalize;
+  cursor: pointer;
+}
+
+.categorySelect {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: #FDF2F3;
+  color: #C07A80;
+  border: 1px solid #E8B4B8;
+  border-radius: 20px;
+  text-transform: capitalize;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .tag {

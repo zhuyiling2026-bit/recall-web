@@ -8,12 +8,3 @@ export function getReminder(item) {
   if (days >= 3) return { label: '3d unread', color: 'yellow' };
   return null;
 }
-
-export const CATEGORY_MAP = {
-  all: null,
-  education: ['education', 'science'],
-  business: ['business', 'tech'],
-  entertainment: 'entertainment',
-  health: ['health', 'other'],
-  travel: 'travel',
-};

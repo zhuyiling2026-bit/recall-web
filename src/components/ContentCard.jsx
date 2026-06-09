@@ -9,8 +9,9 @@ import styles from './ContentCard.module.css';
 export default function ContentCard({ item, index }) {
   const update = useContentStore((s) => s.update);
   const remove = useContentStore((s) => s.remove);
-  const viewMode = useContentStore((s) => s.viewMode);
+  const categories = useContentStore((s) => s.categories);
   const [deleting, setDeleting] = useState(false);
+  const [editingCat, setEditingCat] = useState(false);
   const timerRef = useRef(null);
   const isDeleted = item.status === 'deleted';
 
@@ -54,7 +55,31 @@ export default function ContentCard({ item, index }) {
         <p className={styles.summary}>{item.summary}</p>
 
         <div className={styles.meta}>
-          <span className={styles.category}>{item.category}</span>
+          {editingCat ? (
+            <select
+              className={styles.categorySelect}
+              value={item.category || ''}
+              onChange={(e) => {
+                update(item.id, { category: e.target.value });
+                setEditingCat(false);
+              }}
+              onBlur={() => setEditingCat(false)}
+              autoFocus
+            >
+              {categories.map((c) => (
+                <option key={c.key} value={c.key}>{c.label}</option>
+              ))}
+              <option value="other">Other</option>
+            </select>
+          ) : (
+            <span
+              className={styles.category}
+              onClick={() => setEditingCat(true)}
+              title="Click to change category"
+            >
+              {item.category}
+            </span>
+          )}
           {item.tags?.map((tag) => (
             <span key={tag} className={styles.tag}>{tag}</span>
           ))}

@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import { X, Tag, Folder, FileText, Check } from 'lucide-react';
 import { useContentStore } from '../store/useContentStore';
 import styles from './AnalysisResult.module.css';
 
 export default function AnalysisResult() {
-  const { preview, importing, confirm, dismissPreview } = useContentStore();
+  const { preview, importing, categories, confirm, dismissPreview } = useContentStore();
+  const [selectedCat, setSelectedCat] = useState(null);
 
   if (!preview) return null;
+
+  const category = selectedCat ?? preview.category;
 
   return (
     <div className={styles.overlay} onClick={dismissPreview}>
@@ -20,8 +24,17 @@ export default function AnalysisResult() {
         <div className={styles.meta}>
           <span className={styles.category}>
             <Folder size={14} />
-            {preview.category}
           </span>
+          <select
+            className={styles.categorySelect}
+            value={category}
+            onChange={(e) => setSelectedCat(e.target.value)}
+          >
+            {categories.map((c) => (
+              <option key={c.key} value={c.key}>{c.label}</option>
+            ))}
+            <option value="other">Other</option>
+          </select>
         </div>
 
         <div className={styles.summaryRow}>
@@ -39,7 +52,11 @@ export default function AnalysisResult() {
         </div>
 
         <div className={styles.actions}>
-          <button className={styles.confirmBtn} onClick={confirm} disabled={importing}>
+          <button
+            className={styles.confirmBtn}
+            onClick={() => confirm(category !== preview.category ? { category } : undefined)}
+            disabled={importing}
+          >
             <Check size={18} />
             {importing ? '保存中…' : '完成'}
           </button>
