@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/content/:path*", "destination": "https://recall-backend-production-6eba.up.railway.app/content/:path*" }
+    { "source": "/content/:path*", "destination": "https://recall-backend-production-6eba.up.railway.app/content/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
