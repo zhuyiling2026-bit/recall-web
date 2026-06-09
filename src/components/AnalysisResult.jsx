@@ -3,7 +3,7 @@ import { useContentStore } from '../store/useContentStore';
 import styles from './AnalysisResult.module.css';
 
 export default function AnalysisResult() {
-  const { preview, dismissPreview } = useContentStore();
+  const { preview, importing, confirm, dismissPreview } = useContentStore();
 
   if (!preview) return null;
 
@@ -39,9 +39,9 @@ export default function AnalysisResult() {
         </div>
 
         <div className={styles.actions}>
-          <button className={styles.confirmBtn} onClick={dismissPreview}>
+          <button className={styles.confirmBtn} onClick={confirm} disabled={importing}>
             <Check size={18} />
-            完成
+            {importing ? '保存中…' : '完成'}
           </button>
         </div>
       </div>
